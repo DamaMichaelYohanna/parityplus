@@ -29,30 +29,34 @@ async def login(
         form_data: OAuth2PasswordRequestForm = Depends(),
         session=Depends(get_session)
 ):
-    try:
-        user_obj = session.exec(select(User).where(User.username == form_data.username)).one()
-        if user_obj is None:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Incorrect username or password"
-            )
-
-        hashed_pass = user_obj.password
-        if not verify_password(form_data.password, hashed_pass):
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Incorrect username or password"
-            )
-
-        return {
-            "access_token": create_access_token(user_obj.username),
-            "refresh_token": create_refresh_token(user_obj.username),
-        }
-    except sqlalchemy.exc.NoResultFound:
+    print(form_data.username, form_data.password)
+    print("something is going wrong here")
+    # try:
+    user_obj = session.exec(select(User).where(User.email == form_data.username)).one()
+    print(user_obj, "let's see the result")
+    if user_obj is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Incorrect username or password"
         )
+
+    hashed_pass = user_obj.password
+    if not verify_password(form_data.password, hashed_pass):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect username or password"
+        )
+
+    return {
+        "access_token": create_access_token(user_obj.username),
+        "refresh_token": create_refresh_token(user_obj.username),
+    }
+    # except sqlalchemy.exc.NoResultFound:
+    #     print("No record found")
+    #     raise HTTPException(
+    #         status_code=status.HTTP_400_BAD_REQUEST,
+    #         detail="Incorrect username or password"
+    #     )
 
 
 @user.get("/{user_id}", response_model=Profile)
