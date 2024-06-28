@@ -7,18 +7,15 @@ from sqlmodel import SQLModel, Relationship
 
 class RegisterInSchema(SQLModel):
     """Schema for receiving user credentials"""
-    username: str
+    phone: str
     password: str
-    email: str
-    gender: str
-    full_name: str
+
 
 
 class RegisterOutSchema(SQLModel):
     """Schema to output user info after registration"""
     id: int
-    username: str
-    email: str | None = None
+    phone: str
 
 
 class Associate(BaseModel):

@@ -51,7 +51,7 @@ class User(SQLModel, table=True):
         from_attributes = True
 
     id: int | None = Field(default=None, primary_key=True)
-    username: str
+    phone: str
     password: str
     full_name: str | None = None
     email: str | None = None
@@ -59,7 +59,6 @@ class User(SQLModel, table=True):
     picture: bytes | None = None
     cover: bytes | None = None
     bio: str | None = None
-    phone: int | None = None
     address: str | None = None
     email_verified: bool | None = None
 
